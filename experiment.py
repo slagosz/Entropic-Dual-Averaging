@@ -128,7 +128,7 @@ plt.ylabel('err')
 plt.legend(['Dual Averaging', '$\ell_{1}$ convex aggregation'])
 plt.grid()
 
-plt.savefig('err.pdf', dpi=300, transparent=False, bbox_inches='tight')
+plt.savefig('err.pdf', dpi=1200, transparent=False, bbox_inches='tight')
 
 
 # %% plot algorithms' times of execution
