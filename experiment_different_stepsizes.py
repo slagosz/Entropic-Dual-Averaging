@@ -106,7 +106,7 @@ axins.axhline(y=1.101105958546409, color='tab:red', linestyle='--')
 axins.grid()
 
 ax.indicate_inset_zoom(axins, edgecolor='tab:red')
-plt.legend(['nonadaptive DA', 'adaptive DA'])
+plt.legend(['nonadaptive Entropic DA', 'adaptive Entropic DA'])
 
 plt.xlabel('$\\alpha$')
 plt.ylabel('err')
