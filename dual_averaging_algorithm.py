@@ -106,21 +106,21 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
         model.set_parameters(theta_0)
 
         gradient_sum = 0
-        gradient_max_sum = 0
+        gradient_max_sq_sum = 0
         T = len(x)
 
-        theta_avg = 0
+        theta_avg = theta_0
 
         for i in tqdm(range(T)):
             gradient_i = compute_gradient(model, x, y, i, x0=x0)
 
             if adaptive_stepsize:
-                stepsize = np.sqrt(np.log(self.D) / (G_sq + gradient_max_sum))
+                stepsize = np.sqrt(np.log(self.D) / (G_sq + gradient_max_sq_sum))
             else:
                 stepsize = np.sqrt(np.log(self.D) / (G_sq * (i+1)))
 
             gradient_sum += gradient_i
-            gradient_max_sum += max(gradient_i)
+            gradient_max_sq_sum += np.max(np.abs(gradient_i)) ** 2
 
             theta_i = np.exp(-stepsize * gradient_sum)
             theta_i /= np.linalg.norm(theta_i, 1)
