@@ -67,17 +67,17 @@ for N in N_tab:
     y_mod_da = m_da.evaluate_output(u_val)
     e_da[N] = 1 / len(u_val) * np.sum((y_mod_da - y_val) ** 2)
 
-    # l1 convex aggregation
-    m_aggr = VolterraModel(kernels=kernels)
-    start = time.time()
-    aggr_parameters = aggregation_for_volterra(m_aggr.dictionary, x, y, x0=x0, R=R)
-    end = time.time()
-    time_aggr[N] = end - start
-
-    # validate model
-    m_aggr.set_parameters(aggr_parameters)
-    y_mod_aggr = m_aggr.evaluate_output(u_val)
-    e_aggr[N] = 1 / len(u_val) * np.sum((y_mod_aggr - y_val) ** 2)
+    # # l1 convex aggregation
+    # m_aggr = VolterraModel(kernels=kernels)
+    # start = time.time()
+    # aggr_parameters = aggregation_for_volterra(m_aggr.dictionary, x, y, x0=x0, R=R)
+    # end = time.time()
+    # time_aggr[N] = end - start
+    #
+    # # validate model
+    # m_aggr.set_parameters(aggr_parameters)
+    # y_mod_aggr = m_aggr.evaluate_output(u_val)
+    # e_aggr[N] = 1 / len(u_val) * np.sum((y_mod_aggr - y_val) ** 2)
 
 
 # %% plot models' outputs
@@ -122,7 +122,7 @@ plt_scale = 0.45
 plt.figure(figsize=(plt_scale * 6.4, plt_scale * 4.8))
 
 plt.plot(N_tab, e_da.values(), '.-')
-plt.plot(N_tab, e_aggr.values(), '--.')
+#plt.plot(N_tab, e_aggr.values(), '--.')
 plt.xlabel('N')
 plt.ylabel('err')
 plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
