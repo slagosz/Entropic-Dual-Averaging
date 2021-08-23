@@ -4,7 +4,7 @@ The repository contains an implemention of Entropic Dual Averaging algorithm for
 Scripts *experiment.py* and *experiment_different_stepsizes.py* test the algorithm on [the cascaded tanks benchmark](https://sites.google.com/view/nonlinear-benchmark/benchmarks/cascaded-tanks) and generate plots that have been used in **_Adaptive Entropic Dual Averaging Algorithm  for On-line Nonlinear System Modeling_** paper by **Szymon Łagosz**, **Paweł Wachel** and **Przemysław Śliwiński** affiliated with **Wrocław University of Science and Technology**. 
 
 # Requirements
-The code was tested with Python 3.5.2 on Ubuntu 16.04.7 64bit.
+The code was tested with Python 3.8.9 on Ubuntu 16.04.7 64bit.
 
 Install required python packages using:
  ```
