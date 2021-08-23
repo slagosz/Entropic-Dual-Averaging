@@ -122,7 +122,7 @@ plt_scale = 0.45
 plt.figure(figsize=(plt_scale * 6.4, plt_scale * 4.8))
 
 plt.plot(N_tab, e_da.values(), '.-')
-#plt.plot(N_tab, e_aggr.values(), '--.')
+plt.plot(N_tab, e_aggr.values(), '--.')
 plt.xlabel('N')
 plt.ylabel('err')
 plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
