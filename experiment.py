@@ -32,10 +32,6 @@ model_memory_len = np.max(kernels)
 
 N_tab = [256, 384, 512, 640, 768, 896, 1024]
 
-# %% DA constants calculation
-
-G_sq = (R * R * 2.1) ** 2
-
 # %% run experiment
 
 e_da = {}
@@ -58,7 +54,7 @@ for N in N_tab:
     m_da = VolterraModel(kernels=kernels)
     alg = EntropicDualAveragingAlgorithm(m_da.dictionary, R=R)
     start = time.time()
-    da_parameters = alg.run(x, y, G_sq, x0=x0)
+    da_parameters = alg.run(x, y, x0=x0)
     end = time.time()
     time_da[N] = end - start
 
@@ -92,15 +88,14 @@ plt.rc('xtick', labelsize='small')
 plt.rc('ytick', labelsize='small')
 plt.rc('legend', fontsize='small')
 
-plt_scale = 0.65
-plt.figure(figsize=(plt_scale * 6.4, plt_scale * 4.8))
+plt.figure(figsize=(3.8, 2.4))
 
 plt.plot(y_mod_da)
 plt.plot(y_mod_aggr, '--')
 plt.plot(y_val, '-.')
 plt.xlabel('t')
 plt.ylabel('output')
-plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation', 'True system'])
+plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation', 'True system'], handlelength=2.6)
 plt.grid()
 
 plt.savefig('output.pdf', dpi=1200, transparent=False, bbox_inches='tight')
@@ -118,14 +113,13 @@ plt.rc('xtick', labelsize='small')
 plt.rc('ytick', labelsize='small')
 plt.rc('legend', fontsize='small')
 
-plt_scale = 0.45
-plt.figure(figsize=(plt_scale * 6.4, plt_scale * 4.8))
+plt.figure(figsize=(3.7, 2.4))
 
 plt.plot(N_tab, e_da.values(), '.-')
 plt.plot(N_tab, e_aggr.values(), '--.')
 plt.xlabel('N')
 plt.ylabel('err')
-plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
+plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'], handlelength=2.6)
 plt.grid()
 
 plt.savefig('err.pdf', dpi=1200, transparent=False, bbox_inches='tight')
@@ -149,14 +143,13 @@ plt.rc('xtick', labelsize='small')
 plt.rc('ytick', labelsize='small')
 plt.rc('legend', fontsize='small')
 
-plt_scale = 0.45
-plt.figure(figsize=(plt_scale * 6.4, plt_scale * 4.8))
+plt.figure(figsize=(3.7, 2.4))
 
 plt.plot(x, y, '.-')
 plt.plot(x2, y2, '.--')
 plt.xlabel('N')
 plt.ylabel('time of estimation [s]')
-plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
+plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'], handlelength=2.6)
 plt.grid()
 
 plt.savefig('time.pdf', dpi=1200, transparent=False, bbox_inches='tight')
