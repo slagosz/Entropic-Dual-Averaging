@@ -90,7 +90,7 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
         """
         super().__init__(dictionary, R)
 
-    def run(self, x, y, G_sq, x0=None, adaptive_stepsize=True):
+    def run(self, x, y, G_sq=0, x0=None, adaptive_stepsize=True):
         """
         :param x: vector of inputs
         :param y: vector of outputs
@@ -114,13 +114,13 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
         for i in tqdm(range(T)):
             gradient_i = compute_gradient(model, x, y, i, x0=x0)
 
-            if adaptive_stepsize:
-                stepsize = np.sqrt(np.log(self.D) / (G_sq + gradient_max_sq_sum))
-            else:
-                stepsize = np.sqrt(np.log(self.D) / (G_sq * (i+1)))
-
             gradient_sum += gradient_i
             gradient_max_sq_sum += np.max(np.abs(gradient_i)) ** 2
+
+            if adaptive_stepsize:
+                stepsize = np.sqrt(np.log(self.D) / gradient_max_sq_sum)
+            else:
+                stepsize = np.sqrt(np.log(self.D) / (G_sq * (i+1)))
 
             theta_i = np.exp(-stepsize * gradient_sum)
             theta_i /= np.linalg.norm(theta_i, 1)
