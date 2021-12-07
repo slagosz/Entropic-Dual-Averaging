@@ -127,6 +127,6 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
 
             model.set_parameters(theta_i)
 
-            theta_avg = (theta_i + theta_avg * i) / (i + 1)
+            theta_avg = (theta_i + theta_avg * (i +1)) / (i + 2)
 
         return map_parameters_to_simplex(theta_avg, self.R)
