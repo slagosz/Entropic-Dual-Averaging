@@ -1,0 +1,11 @@
+font.family:         serif
+font.size:           10
+text.usetex:         True
+axes.labelsize:      small
+xtick.labelsize:     small
+ytick.labelsize:     small
+legend.fontsize:     small
+legend.handlelength: 2.6
+savefig.dpi:         1200
+savefig.bbox:        tight
+savefig.transparent: False

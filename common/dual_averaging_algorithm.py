@@ -1,5 +1,6 @@
-from volterra_model import *
+from common.volterra_model import DictionaryBasedModel
 import copy
+import numpy as np
 from tqdm import tqdm
 
 
@@ -40,7 +41,7 @@ class EntropicAlgorithm:
     def __init__(self, dictionary, R):
         self.dictionary = copy.deepcopy(dictionary)
 
-        if R is not 1:
+        if R != 1:
             scale_dictionary(self.dictionary, R)
 
         extend_dictionary(self.dictionary)

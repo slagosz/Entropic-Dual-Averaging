@@ -1,14 +1,17 @@
+import copy
+
 import numpy as np
 
 from cvxpy import Problem, Minimize, Variable
 from cvxpy import norm as cvx_norm
 
 
-def aggregation(X, Y, R=1):
+def solve_l1_constrained_ls_problem(X, Y, R=1, solver='ECOS'):
     """
     :param X: design matrix
     :param Y: system's outputs
     :param R: radius of l1 ball (feasible set)
+    :param solver: optimization solver
     :return: vector of parameters
     """
 
@@ -17,7 +20,7 @@ def aggregation(X, Y, R=1):
     o = Minimize(cvx_norm(X @ A - Y, 2))
     c = [cvx_norm(A, 1) <= R]
     p = Problem(o, c)
-    p.solve()
+    p.solve(solver=solver, verbose=True)
 
     return A.value
 
@@ -48,16 +51,21 @@ def create_design_matrix(dictionary, x, x0=None):
     return X
 
 
-def aggregation_for_volterra(dictionary, x, y, x0=None, R=1):
-    """
-    :param dictionary: an instance of volterra_model.VolterraDictionary
-    :param x: vector of inputs
-    :param y: vector of outputs
-    :param x0: vector of initial conditions
-    :param R: radius of l1 ball (feasible set)
-    :return:
-    """
+class L1AggregationAlgorithm:
+    def __init__(self, dictionary, R=1):
+        """
+        :param dictionary: an instance of volterra_model.VolterraDictionary
+        :param R: radius of l1 ball (feasible set)
+        """
+        self.dictionary = copy.deepcopy(dictionary)
+        self.R = R
 
-    X = create_design_matrix(dictionary, x, x0)
+    def run(self, x, y, x0):
+        """
+        :param x: vector of inputs
+        :param y: vector of outputs
+        :param x0: vector of initial conditions
+        """
+        X = create_design_matrix(self.dictionary, x, x0)
 
-    return aggregation(X, y, R)
+        return solve_l1_constrained_ls_problem(X, y, self.R)
