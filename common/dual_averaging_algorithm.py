@@ -112,7 +112,7 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
 
         theta_avg = theta_0
 
-        for i in tqdm(range(T)):
+        for i in tqdm(range(T), desc="Estimating model"):
             gradient_i = compute_gradient(model, x, y, i, x0=x0)
 
             gradient_sum += gradient_i
