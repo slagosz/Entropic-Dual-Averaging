@@ -9,8 +9,8 @@ x_est, y_est, x_val, y_val = load_data()
 
 # %% setup model parameters
 
-kernels = (60, 60)
-R = 25
+kernels = (5, 25)
+R = 9.5
 
 # %% setup experiment parameters
 

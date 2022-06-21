@@ -22,3 +22,5 @@ def grid_search(algorithm_class, x_est, y_est, x_val, y_val, kernels_ranges, R_r
     timestr = time.strftime("%Y%m%d-%H%M%S")
     with open(f'error_{timestr}.json', 'w') as f:
         json.dump(dict(errors=errors, best_params=best_kernels_r, best_params_error=errors[best_kernels_r]), f)
+
+    return best_kernels_r
