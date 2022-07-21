@@ -6,7 +6,7 @@ from cvxpy import Problem, Minimize, Variable
 from cvxpy import norm as cvx_norm
 
 
-def solve_l1_constrained_ls_problem(X, Y, R=1, solver='ECOS'):
+def solve_l1_constrained_ls_problem(X, Y, R=1, solver='ECOS', verbose=False):
     """
     :param X: design matrix
     :param Y: system's outputs
@@ -20,7 +20,7 @@ def solve_l1_constrained_ls_problem(X, Y, R=1, solver='ECOS'):
     o = Minimize(cvx_norm(X @ A - Y, 2))
     c = [cvx_norm(A, 1) <= R]
     p = Problem(o, c)
-    p.solve(solver=solver, verbose=True)
+    p.solve(solver=solver, verbose=verbose)
 
     return A.value
 
