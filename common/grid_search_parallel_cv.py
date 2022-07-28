@@ -49,7 +49,7 @@ def helper_func(outdir, x_est, y_est, kernels, algorithm_class, R):
 
     print(f"kernels = {kernels}, R = {R}, avg errr = {avg_error}")
 
-    filename = f'error_{algorithm_class.__name__}_kernels={kernels}_R={R}.json'
+    filename = f'error_{algorithm_class.__name__}_kernels={kernels}_R={R}.pz'
     fp = os.path.join(outdir, filename)
 
     with open(fp, 'wb') as f:
