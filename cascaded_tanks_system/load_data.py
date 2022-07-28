@@ -1,9 +1,12 @@
+import os
 from scipy.io import loadmat
 import numpy as np
 
 
 def load_data():
-    data = loadmat('data/dataBenchmark.mat')
+    dirname = os.path.dirname(__file__)
+    filename = os.path.join(dirname, 'data/dataBenchmark.mat')
+    data = loadmat(filename)
 
     u_est = np.squeeze(data['uEst'])
     y_est = np.squeeze(data['yEst'])
