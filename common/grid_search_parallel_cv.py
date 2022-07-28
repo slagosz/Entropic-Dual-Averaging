@@ -47,7 +47,7 @@ def helper_func(outdir, x_est, y_est, kernels, algorithm_class, R):
     avg_error = np.average(errors_folds)
     result = dict(kernels=kernels, R=R, errors_folds=errors_folds, avg_error=avg_error)
 
-    print(f"kernels = {kernels}, R = {R}, avg errr = {avg_error}")
+    # print(f"kernels = {kernels}, R = {R}, avg errr = {avg_error}")
 
     filename = f'error_{algorithm_class.__name__}_kernels={kernels}_R={R}.pz'
     fp = os.path.join(outdir, filename)
