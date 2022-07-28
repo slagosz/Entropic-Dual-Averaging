@@ -16,15 +16,15 @@ def preprocess_input_signals(x_est, x_val):
 
 
 def preprocess_datasets(training_datasets, validation_dataset):
-    training_input = np.concatenate([[ds['x'], ds['x0']] for ds in training_datasets])
-    scale_parameter = np.abs(np.max(training_input))
+    training_input = np.concatenate([np.concatenate([ds['x'], ds['x0']]) for ds in training_datasets])
+    scale_parameter = 1 / np.abs(np.max(training_input))
 
     training_datasets_scaled = copy.deepcopy(training_datasets)
-    validation_dataset_scaled = validation_dataset.copy()
+    validation_dataset_scaled = copy.deepcopy(validation_dataset)
 
-    for ds in [training_datasets, validation_dataset]:
-        ds['x'] /= scale_parameter
-        ds['x0'] /= scale_parameter
+    for ds in training_datasets_scaled + [validation_dataset_scaled]:
+        ds['x'] *= scale_parameter
+        ds['x0'] *= scale_parameter
 
     return training_datasets_scaled, validation_dataset_scaled
 

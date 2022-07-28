@@ -1,6 +1,6 @@
 import itertools
-import json
-import time
+import pickle
+import os.path
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -31,8 +31,11 @@ def split_dataset(x, y, model_memory_len, folds_num=5):
     return datasets
 
 
-def helper_func(datasets, kernels, algorithm_class, R):
+def helper_func(outdir, x_est, y_est, kernels, algorithm_class, R):
     errors_folds = []
+
+    model_memory_len = np.max(kernels)
+    datasets = split_dataset(x_est, y_est, model_memory_len)
 
     for validation_ds_index, validation_dataset in enumerate(datasets):
         training_datasets = [ds for ind, ds in enumerate(datasets) if ind != validation_ds_index]
@@ -41,24 +44,27 @@ def helper_func(datasets, kernels, algorithm_class, R):
                                                                             kernels, algorithm_class, R)
         errors_folds.append(error)
 
-    avg_error = np.avg(errors_folds)
+    avg_error = np.average(errors_folds)
     result = dict(kernels=kernels, R=R, errors_folds=errors_folds, avg_error=avg_error)
+
+    print(f"kernels = {kernels}, R = {R}, avg errr = {avg_error}")
+
+    filename = f'error_{algorithm_class.__name__}_kernels={kernels}_R={R}.json'
+    fp = os.path.join(outdir, filename)
+
+    with open(fp, 'wb') as f:
+        pickle.dump(result, f)
 
     return result
 
 
-def grid_search(algorithm_class, x_est, y_est, x_val, y_val, kernels_ranges, R_range, n_jobs=-1):
+def grid_search(outdir, algorithm_class, x_est, y_est, kernels_ranges, R_range, n_jobs=-1):
     all_kernels = list(itertools.product(*kernels_ranges))
-    results = Parallel(n_jobs=n_jobs)(delayed(helper_func)(x_est, y_est, x_val, y_val, kernels, algorithm_class, R)
+    results = Parallel(n_jobs=n_jobs)(delayed(helper_func)(outdir, x_est, y_est, kernels, algorithm_class, R)
                                                            for kernels in tqdm(all_kernels) for R in R_range)
 
-    errors = dict((key, error) for error, key in results)
+    best_result = min(results, key=lambda r: r['avg_error'])
 
-    best_kernels_r = min(errors, key=errors.get)
-    print(f"Lowest error for {best_kernels_r}. Its value = {errors[best_kernels_r]}.")
+    print(f"Lowest avg error = {best_result['avg_error']} for kernels = {best_result['kernels']}, R = {best_result['R']}")
 
-    timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open(f'error_{algorithm_class.__name__}_{timestr}.json', 'w') as f:
-        json.dump(dict(errors=errors, best_params=best_kernels_r, best_params_error=errors[best_kernels_r]), f)
-
-    return best_kernels_r
+    return best_result
