@@ -8,9 +8,9 @@ from common.volterra_model import VolterraModel
 
 
 def preprocess_input_signals(x_est, x_val):
-    scale_parameter = np.abs(np.max(x_est))
-    x_est_scaled = x_est / scale_parameter
-    x_val_scaled = x_val / scale_parameter
+    scale_parameter = 1 / np.abs(np.max(x_est))
+    x_est_scaled = x_est * scale_parameter
+    x_val_scaled = x_val * scale_parameter
 
     return x_est_scaled, x_val_scaled
 

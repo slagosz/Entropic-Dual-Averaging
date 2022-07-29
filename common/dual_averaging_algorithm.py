@@ -129,6 +129,46 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
 
             model.set_parameters(theta_i)
 
-            theta_avg = (theta_i + theta_avg * (i +1)) / (i + 2)
+            theta_avg = (theta_i + theta_avg * (i + 1)) / (i + 2)
 
         return map_parameters_to_simplex(theta_avg, self.R)
+
+
+    def run_on_many_datasets(self, datasets, G_sq=0, adaptive_stepsize=True):
+        model = DictionaryBasedModel(self.dictionary)
+        theta_0 = np.ones(self.D) / self.D
+        model.set_parameters(theta_0)
+
+        gradient_sum = 0
+        gradient_max_sq_sum = 0
+
+        theta_avg = theta_0
+
+        i_total = 0
+        for ds_index, ds in enumerate(datasets):
+            x = ds['x']
+            x0 = ds['x0']
+            y = ds['y']
+
+            T = len(x)
+            for i in range(T):
+                gradient_i = compute_gradient(model, x, y, i, x0=x0)
+
+                gradient_sum += gradient_i
+                gradient_max_sq_sum += np.max(np.abs(gradient_i)) ** 2
+
+                if adaptive_stepsize:
+                    stepsize = np.sqrt(np.log(self.D) / gradient_max_sq_sum)
+                else:
+                    stepsize = np.sqrt(np.log(self.D) / (G_sq * (i_total+1)))
+
+                theta_i = np.exp(-stepsize * gradient_sum)
+                theta_i /= np.linalg.norm(theta_i, 1)
+
+                model.set_parameters(theta_i)
+
+                theta_avg = (theta_i + theta_avg * (i_total + 1)) / (i_total + 2)
+                i_total += 1
+
+        return map_parameters_to_simplex(theta_avg, self.R)
+
