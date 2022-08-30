@@ -1,31 +1,40 @@
 import itertools
-import json
-import time
+import pickle
+import os.path
+
 from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from common.run_experiment import estimate_and_validate_volterra_model
 
 
-def helper_func(x_est, y_est, x_val, y_val, kernels, algorithm_class, R):
-    results_key = "kernels=" + str(kernels) + "_R=" + str(R)
+def helper_func(outdir, x_est, y_est, x_val, y_val, kernels, algorithm_class, R):
+    filename = f'val_error_{algorithm_class.__name__}_kernels={kernels}_R={R}.pz'
+    fp = os.path.join(outdir, filename)
+
+    if os.path.isfile(fp):
+        print(f"Results for kernels={kernels},  R={R} already exist, skipping computations...")
+        with open(fp, 'rb') as f:
+            results = pickle.load(f)
+
+        return results
+
     error, _, _ = estimate_and_validate_volterra_model(x_est, y_est, x_val, y_val, kernels, algorithm_class, R)
+    result = dict(kernels=kernels, R=R, val_error=error)
 
-    return error, results_key
+    with open(fp, 'wb') as f:
+        pickle.dump(result, f)
+
+    return result
 
 
-def grid_search(algorithm_class, x_est, y_est, x_val, y_val, kernels_ranges, R_range):
+def grid_search(outdir, algorithm_class, x_est, y_est, x_val, y_val, kernels_ranges, R_range, n_jobs=-1):
     all_kernels = list(itertools.product(*kernels_ranges))
-    results = Parallel(n_jobs=8)(delayed(helper_func)(x_est, y_est, x_val, y_val, kernels, algorithm_class, R)
-                                                      for kernels in tqdm(all_kernels) for R in R_range)
+    results = Parallel(n_jobs=n_jobs)(delayed(helper_func)(outdir, x_est, y_est, x_val, y_val, kernels, algorithm_class, R)
+                                      for kernels in tqdm(all_kernels) for R in R_range)
 
-    errors = dict((key, error) for error, key in results)
+    best_result = min(results, key=lambda r: r['val_error'])
 
-    best_kernels_r = min(errors, key=errors.get)
-    print(f"Lowest error for {best_kernels_r}. Its value = {errors[best_kernels_r]}.")
+    print(f"Lowest validation error = {best_result['avg_error']} for kernels = {best_result['kernels']}, R = {best_result['R']}")
 
-    timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open(f'error_{algorithm_class.__name__}_{timestr}.json', 'w') as f:
-        json.dump(dict(errors=errors, best_params=best_kernels_r, best_params_error=errors[best_kernels_r]), f)
-
-    return best_kernels_r
+    return best_result

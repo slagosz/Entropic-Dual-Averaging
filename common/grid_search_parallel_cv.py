@@ -66,7 +66,7 @@ def helper_func(outdir, x_est, y_est, kernels, algorithm_class, R):
 def grid_search(outdir, algorithm_class, x_est, y_est, kernels_ranges, R_range, n_jobs=-1):
     all_kernels = list(itertools.product(*kernels_ranges))
     results = Parallel(n_jobs=n_jobs)(delayed(helper_func)(outdir, x_est, y_est, kernels, algorithm_class, R)
-                                                           for kernels in tqdm(all_kernels) for R in R_range)
+                                      for kernels in tqdm(all_kernels) for R in R_range)
 
     best_result = min(results, key=lambda r: r['avg_error'])
 
