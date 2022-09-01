@@ -10,7 +10,11 @@ from common.volterra_model import VolterraModel
 def preprocess_input_signals(x_est, x_val):
     scale_parameter = 1 / np.abs(np.max(x_est))
     x_est_scaled = x_est * scale_parameter
-    x_val_scaled = x_val * scale_parameter
+
+    if x_val is None:
+        x_val_scaled = None
+    else:
+        x_val_scaled = x_val * scale_parameter
 
     return x_est_scaled, x_val_scaled
 
@@ -53,9 +57,13 @@ def estimate_and_validate_volterra_model(x_est, y_est, x_val, y_val, kernels, al
     execution_time = end - start
 
     # validate model
-    model.set_parameters(model_parameters)
-    y_mod = model.evaluate_output(x_val)
-    error = 1 / len(x_val) * np.sum((y_mod - y_val) ** 2)
+    if x_val is None or y_val is None:
+        error = None
+        y_mod = None
+    else:
+        model.set_parameters(model_parameters)
+        y_mod = model.evaluate_output(x_val)
+        error = 1 / len(x_val) * np.sum((y_mod - y_val) ** 2)
 
     return error, execution_time, y_mod
 
