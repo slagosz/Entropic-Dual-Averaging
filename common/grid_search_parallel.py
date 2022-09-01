@@ -35,6 +35,6 @@ def grid_search(outdir, algorithm_class, x_est, y_est, x_val, y_val, kernels_ran
 
     best_result = min(results, key=lambda r: r['val_error'])
 
-    print(f"Lowest validation error = {best_result['avg_error']} for kernels = {best_result['kernels']}, R = {best_result['R']}")
+    print(f"Lowest validation error = {best_result['val_error']} for kernels = {best_result['kernels']}, R = {best_result['R']}")
 
     return best_result

@@ -4,6 +4,7 @@ import numpy as np
 
 from cvxpy import Problem, Minimize, Variable
 from cvxpy import norm as cvx_norm
+from cvxpy.error import SolverError
 
 
 def solve_l1_constrained_ls_problem(X, Y, R=1, solver='ECOS', verbose=False):
@@ -74,4 +75,11 @@ class L1AggregationAlgorithm:
         X = np.concatenate([create_design_matrix(self.dictionary, ds['x'], ds['x0']) for ds in datasets])
         y = np.concatenate([ds['y'] for ds in datasets])
 
-        return solve_l1_constrained_ls_problem(X, y, self.R)
+        try:
+            result = solve_l1_constrained_ls_problem(X, y, self.R, solver='ECOS')
+        except SolverError:
+            print('ECOS solver failed. Trying SCS...')
+            result = solve_l1_constrained_ls_problem(X, y, self.R, solver='SCS')
+
+        return result
+
