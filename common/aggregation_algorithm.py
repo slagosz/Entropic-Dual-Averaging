@@ -69,7 +69,13 @@ class L1AggregationAlgorithm:
         """
         X = create_design_matrix(self.dictionary, x, x0)
 
-        return solve_l1_constrained_ls_problem(X, y, self.R)
+        try:
+            result = solve_l1_constrained_ls_problem(X, y, self.R, solver='ECOS')
+        except SolverError:
+            print('ECOS solver failed. Trying SCS...')
+            result = solve_l1_constrained_ls_problem(X, y, self.R, solver='SCS')
+
+        return result
 
     def run_on_many_datasets(self, datasets: dict):
         X = np.concatenate([create_design_matrix(self.dictionary, ds['x'], ds['x0']) for ds in datasets])

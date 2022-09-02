@@ -1,21 +1,24 @@
 import os
+import numpy as np
 
-from common.experiment_err_vs_n import run_experiment
+from common.experiment_err_vs_n import run_experiment, plot_results
 from load_data import load_data
 
-# %% setup model parameters
 
-best_kernels_da = (10, 90, 0)
-best_R_da = 35
+if __name__ == "__main__":
+    # %% setup model parameters
+    lowest_cv_err_da_parameters = dict(kernels=(10, 90, 0), R=35)
+    lowest_val_err_da_parameters = dict(kernels=(10, 90, 20), R=30)
 
-best_kernels_aggr = (110, 10)
-best_R_aggr = 35
+    lowest_cv_err_aggr_parameters = dict(kernels=(110, 0, 10), R=35)
+    lowest_val_err_aggr_parameters = dict(kernels=(10, 70, 10), R=25)
 
-# %% setup experiment parameters
+    # %% setup experiment parameters
+    N_range = np.arange(200, 1001, 100)
 
-N_range = [256, 384, 512, 640, 768, 896, 1024]
+    results_directory = os.path.join(os.path.dirname(__file__), 'results')
 
-results_directory = os.path.join(os.path.dirname(__file__), 'results')
+    results = run_experiment(load_data, N_range, lowest_cv_err_da_parameters, lowest_val_err_da_parameters,
+                             lowest_cv_err_aggr_parameters, lowest_val_err_aggr_parameters, results_directory)
 
-run_experiment(load_data, N_range, best_kernels_da, best_R_da, best_kernels_aggr, best_R_aggr,
-               results_directory)
+    plot_results(results, results_directory)
