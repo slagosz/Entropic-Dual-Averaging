@@ -15,23 +15,24 @@ def generate_results(load_data_function, N_range, lowest_cv_err_da_parameters, l
     e_aggr_cv = {}
     e_aggr_val = {}
 
+    N_range = N_range.tolist()
     for N in tqdm(N_range):
         x_est_sliced = x_est[:N]
         y_est_sliced = y_est[:N]
 
-        e_da_cv[N], _, _ = estimate_and_validate_DA(x_est_sliced, y_est_sliced, x_val, y_val,
+        e_da_cv[int(N)], _, _ = estimate_and_validate_DA(x_est_sliced, y_est_sliced, x_val, y_val,
                                                     lowest_cv_err_da_parameters['kernels'],
                                                     lowest_cv_err_da_parameters['R'])
 
-        e_da_val[N], _, _ = estimate_and_validate_DA(x_est_sliced, y_est_sliced, x_val, y_val,
+        e_da_val[int(N)], _, _ = estimate_and_validate_DA(x_est_sliced, y_est_sliced, x_val, y_val,
                                                      lowest_val_err_da_parameters['kernels'],
                                                      lowest_val_err_da_parameters['R'])
 
-        e_aggr_cv[N], _, _ = estimate_and_validate_l1_aggregation(x_est_sliced, y_est_sliced, x_val, y_val,
+        e_aggr_cv[int(N)], _, _ = estimate_and_validate_l1_aggregation(x_est_sliced, y_est_sliced, x_val, y_val,
                                                                   lowest_cv_err_aggr_parameters['kernels'],
                                                                   lowest_cv_err_aggr_parameters['R'])
 
-        e_aggr_val[N], _, _ = estimate_and_validate_l1_aggregation(x_est_sliced, y_est_sliced, x_val, y_val,
+        e_aggr_val[int(N)], _, _ = estimate_and_validate_l1_aggregation(x_est_sliced, y_est_sliced, x_val, y_val,
                                                                    lowest_val_err_aggr_parameters['kernels'],
                                                                    lowest_val_err_aggr_parameters['R'])
 

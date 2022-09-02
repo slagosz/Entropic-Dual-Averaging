@@ -12,4 +12,3 @@ R_range = np.concatenate([np.arange(1, 11, 1), np.arange(15, 41, 5)])
 
 outdir = os.path.join(os.path.dirname(__file__), 'results')
 result = grid_search(outdir, EntropicDualAveragingAlgorithm, x_est, y_est, x_val, y_val, kernels_ranges, R_range, n_jobs=60)
-
