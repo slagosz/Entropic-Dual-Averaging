@@ -59,7 +59,7 @@ def plot_results(results, results_directory):
     plt.savefig(os.path.join(results_directory, 'err_vs_n.pdf'))
 
 
-def run_experiment(load_data_function, N_range,lowest_cv_err_da_parameters, lowest_val_err_da_parameters,
+def run_experiment(load_data_function, N_range, lowest_cv_err_da_parameters, lowest_val_err_da_parameters,
                    lowest_cv_err_aggr_parameters, lowest_val_err_aggr_parameters, results_directory):
     results_filename = 'err_vs_n.json'
     results_fp = os.path.join(results_directory, results_filename)
