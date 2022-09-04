@@ -55,8 +55,8 @@ def plot_results(results, da_reference_error, aggr_reference_error):
     plt.plot(SNR_range, errors_aggr / aggr_reference_error, '.--')
 
     plt.xlabel('SNR')
-    plt.ylabel('err / err_0')
-    plt.legend(['EDA', 'CVXAGGR'])
+    plt.ylabel(r'$\textrm{err / err}_0$')
+    plt.legend(['EDA', 'CA'])
     plt.grid()
 
     plt.savefig(f'err_extra_noise.pdf')

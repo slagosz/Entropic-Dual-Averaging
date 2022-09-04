@@ -21,4 +21,4 @@ if __name__ == "__main__":
     results = run_experiment(load_data, N_range, lowest_cv_err_da_parameters, lowest_val_err_da_parameters,
                              lowest_cv_err_aggr_parameters, lowest_val_err_aggr_parameters, results_directory)
 
-    plot_results(results, results_directory)
+    plot_results(results)

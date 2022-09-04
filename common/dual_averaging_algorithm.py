@@ -1,7 +1,6 @@
 from common.volterra_model import DictionaryBasedModel
 import copy
 import numpy as np
-from tqdm import tqdm
 
 
 def compute_gradient(model, x, y, t, x0=None):
@@ -91,13 +90,14 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
         """
         super().__init__(dictionary, R)
 
-    def run(self, x, y, G_sq=0, x0=None, adaptive_stepsize=True):
+    def run(self, x, y, G_sq=0, x0=None, adaptive_stepsize=True, num_of_epochs=1):
         """
         :param x: vector of inputs
         :param y: vector of outputs
         :param G_sq: G squared constant (the algorithm's parameter; see the article for details)
         :param x0: vector of model's initial conditions
         :param adaptive_stepsize:
+        :param num_of_epochs:
         :return: model's parameters
         """
         assert len(x) == len(y)
@@ -112,24 +112,25 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
 
         theta_avg = theta_0
 
-        # for i in tqdm(range(T), desc='Model estimation'):
-        for i in range(T):
-            gradient_i = compute_gradient(model, x, y, i, x0=x0)
+        for _ in range(num_of_epochs):
+            for t in range(T):
+                i = t + num_of_epochs * T
+                gradient_t = compute_gradient(model, x, y, t, x0=x0)
 
-            gradient_sum += gradient_i
-            gradient_max_sq_sum += np.max(np.abs(gradient_i)) ** 2
+                gradient_sum += gradient_t
+                gradient_max_sq_sum += np.max(np.abs(gradient_t)) ** 2
 
-            if adaptive_stepsize:
-                stepsize = np.sqrt(np.log(self.D) / gradient_max_sq_sum)
-            else:
-                stepsize = np.sqrt(np.log(self.D) / (G_sq * (i+1)))
+                if adaptive_stepsize:
+                    stepsize = np.sqrt(np.log(self.D) / gradient_max_sq_sum)
+                else:
+                    stepsize = np.sqrt(np.log(self.D) / (G_sq * (i+1)))
 
-            theta_i = np.exp(-stepsize * gradient_sum)
-            theta_i /= np.linalg.norm(theta_i, 1)
+                theta_i = np.exp(-stepsize * gradient_sum)
+                theta_i /= np.linalg.norm(theta_i, 1)
 
-            model.set_parameters(theta_i)
+                model.set_parameters(theta_i)
 
-            theta_avg = (theta_i + theta_avg * (i + 1)) / (i + 2)
+                theta_avg = (theta_i + theta_avg * (i + 1)) / (i + 2)
 
         return map_parameters_to_simplex(theta_avg, self.R)
 

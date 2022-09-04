@@ -8,11 +8,11 @@ if __name__ == "__main__":
 
     kernels_da = (10, 90, 20)
     R_da = 30
-    da_reference_error = 0.8375017067532958  # calculated in the other experiment
+    da_reference_error = 1.0737385190134519  # calculated in the other experiment
 
     kernels_aggr = (10, 70, 10)
     R_aggr = 25
-    aggr_reference_error = 0.5711188166506581  # calculated in the other experiment
+    aggr_reference_error = 0.881353908668148  # calculated in the other experiment
 
     results_directory = os.path.join(os.path.dirname(__file__), 'results')
 
