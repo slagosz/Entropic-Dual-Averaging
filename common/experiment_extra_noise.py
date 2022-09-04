@@ -31,8 +31,8 @@ def generate_results(load_data_function, SNR_range, kernels_da, R_da, kernels_ag
             err_da, _, _ = estimate_and_validate_DA(x_est, y_est_noisy, x_val, y_val, kernels_da, R_da)
             err_aggr, _, _ = estimate_and_validate_l1_aggregation(x_est, y_est_noisy, x_val, y_val, kernels_aggr, R_aggr)
 
-            errors_da[i] = err_da / num_of_experiments
-            errors_aggr[i] = err_aggr / num_of_experiments
+            errors_da[i] += err_da / num_of_experiments
+            errors_aggr[i] += err_aggr / num_of_experiments
 
     results = dict(errors_da=errors_da, errors_aggr=errors_aggr, kernels_da=kernels_da, R_da=R_da,
                    kernels_aggr=kernels_aggr, R_aggr=R_aggr, SNR_range=SNR_range,
