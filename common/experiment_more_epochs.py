@@ -18,7 +18,7 @@ def generate_results(load_data_function, epochs_range, da_parameters):
                                                num_of_epochs=num_of_epochs)
         errors.append(error)
 
-    return dict(errors=errors, epochs_range=epochs_range)
+    return dict(errors=errors, epochs_range=list(epochs_range))
 
 
 def plot_results(results):
@@ -30,7 +30,7 @@ def plot_results(results):
     # plt.figure(figsize=(3.7, 2.4))
     legend = []
     for err, epochs in zip(results['errors'], results['epochs_range']):
-        plt.plot(results['N_range'], results['err_da_cv'].values(), '.-')
+        plt.plot(err, epochs, '.-')
         legend.append(str(epochs))
 
     plt.xlabel('num of epochs')

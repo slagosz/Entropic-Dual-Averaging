@@ -7,7 +7,7 @@ from load_data import load_data
 
 if __name__ == "__main__":
     # %% setup model parameters
-    da_parameters = dict(kernels=(10, 90, 0), R=35)
+    da_parameters = dict(kernels=(10, 90, 20), R=30)
 
     # %% setup experiment parameters
     epochs_range = np.arange(1, 6)
