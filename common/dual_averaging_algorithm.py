@@ -112,13 +112,13 @@ class EntropicDualAveragingAlgorithm(EntropicAlgorithm):
 
         theta_avg = theta_0
 
-        for _ in range(num_of_epochs):
+        for epoch in range(num_of_epochs):
             for t in range(T):
-                i = t + num_of_epochs * T
-                gradient_t = compute_gradient(model, x, y, t, x0=x0)
+                i = t + epoch * T
+                gradient_i = compute_gradient(model, x, y, t, x0=x0)
 
-                gradient_sum += gradient_t
-                gradient_max_sq_sum += np.max(np.abs(gradient_t)) ** 2
+                gradient_sum += gradient_i
+                gradient_max_sq_sum += np.max(np.abs(gradient_i)) ** 2
 
                 if adaptive_stepsize:
                     stepsize = np.sqrt(np.log(self.D) / gradient_max_sq_sum)

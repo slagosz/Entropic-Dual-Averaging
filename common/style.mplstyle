@@ -9,3 +9,4 @@ legend.handlelength: 2.6
 savefig.dpi:         1200
 savefig.bbox:        tight
 savefig.transparent: False
+savefig.pad_inches  : 0.01

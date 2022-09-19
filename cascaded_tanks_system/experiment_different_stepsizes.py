@@ -38,7 +38,7 @@ for stepsize_scaling in stepsize_scaling_tab:
 
 # %% plot models' errors
 
-eda_adaptive_error = 1.422450866750514  # computed in the other experiment
+eda_adaptive_error, _, _ = estimate_and_validate_DA(x_est, y_est, x_val, y_val, kernels, R)
 
 err_nonadaptive_lists = sorted(err_nonadaptive.items())
 
@@ -47,7 +47,7 @@ x, y = zip(*err_nonadaptive_lists)
 plt.close()
 plt.style.use('../common/style.mplstyle')
 
-fig, ax = plt.subplots(figsize=(3.8, 2.4))
+fig, ax = plt.subplots(figsize=(3.8, 2.0))
 
 ax.plot(x, y, '.-', color='tab:blue')
 ax.axhline(y=eda_adaptive_error, color='tab:orange', linestyle='--')
@@ -62,7 +62,7 @@ axins.axhline(y=eda_adaptive_error, color='tab:orange', linestyle='--')
 axins.grid()
 
 ax.indicate_inset_zoom(axins, edgecolor='tab:red')
-plt.legend(['nonadaptive Entropic DA', 'adaptive Entropic DA'])
+plt.legend(['nonadaptive step-size', 'adaptive step-size'])
 
 plt.xlabel('$\\alpha$')
 plt.ylabel('err')

@@ -33,7 +33,7 @@ def run_experiment(N_list, model_memory_length_list, num_of_experiments=5):
         results[algorithm_class.__name__ + '_var_D'] = []
 
         for N_idx, N in enumerate(N_list):
-            print(f'N = {N}')  # FIXME
+            print(f'N = {N}')
             M = model_memory_length_list[-1]
             kernels = [0, M]
             avg_execution_time = measure_estimation_time(x_est[:N], y_est[:N], kernels, algorithm_class, R,
@@ -41,7 +41,7 @@ def run_experiment(N_list, model_memory_length_list, num_of_experiments=5):
             results[algorithm_class.__name__ + '_var_N'].append(avg_execution_time)
 
         for M_idx, M in enumerate(model_memory_length_list):
-            print(f'M = {M}')  # FIXME
+            print(f'M = {M}')
 
             N = N_list[-1]
             kernels = [0, M]
@@ -64,24 +64,24 @@ def plot_results(results):
     results_aggr_var_N = results[L1AggregationAlgorithm.__name__ + '_var_N']
     results_aggr_var_D = results[L1AggregationAlgorithm.__name__ + '_var_D']
 
-    plt.figure(figsize=(3.7, 2.4))
+    plt.figure(figsize=(3.7, 2.0))
     plt.plot(N_list, results_eda_var_N, '.-')
     plt.plot(N_list, results_aggr_var_N, '.--')
     plt.xlabel('N')
     plt.ylabel('time of estimation [s]')
-    plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
+    plt.legend(['EDA', 'CA'])
     plt.grid()
 
     plt.savefig('time_var_N.pdf')
 
     plt.close()
 
-    plt.figure(figsize=(3.7, 2.4))
+    plt.figure(figsize=(3.7, 2.0))
     plt.plot(D_list, results_eda_var_D, '.-')
     plt.plot(D_list, results_aggr_var_D, '.--')
     plt.xlabel('D')
     plt.ylabel('time of estimation [s]')
-    plt.legend(['Entropic DA', '$\ell_{1}$ convex aggregation'])
+    plt.legend(['EDA', 'CA'])
     plt.grid()
 
     plt.savefig('time_var_D.pdf')

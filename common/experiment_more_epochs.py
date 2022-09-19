@@ -21,28 +21,25 @@ def generate_results(load_data_function, epochs_range, da_parameters):
     return dict(errors=errors, epochs_range=list(epochs_range))
 
 
-def plot_results(results):
+def plot_results(results, fn):
     style_filepath = os.path.join(os.path.dirname(__file__), 'style.mplstyle')
 
     plt.close()
     plt.style.use(style_filepath)
 
-    # plt.figure(figsize=(3.7, 2.4))
-    legend = []
-    for err, epochs in zip(results['errors'], results['epochs_range']):
-        plt.plot(err, epochs, '.-')
-        legend.append(str(epochs))
+    plt.figure(figsize=(3.7, 2.4))
+    plt.plot(results['epochs_range'], results['errors'], '.-')
 
+    plt.xticks(results['epochs_range'])
     plt.xlabel('num of epochs')
     plt.ylabel('err')
-    plt.legend(legend)
     plt.grid()
 
-    plt.savefig(os.path.join('err_vs_num_of_epochs.pdf'))
+    plt.savefig(fn + '.pdf')
 
 
-def run_experiment(load_data_function, epochs_range, da_parameters, results_directory):
-    results_filename = 'err_more_epochs.json'
+def run_experiment(load_data_function, epochs_range, da_parameters, results_directory, fn):
+    results_filename = f'{fn}.json'
     results_fp = os.path.join(results_directory, results_filename)
     if os.path.isfile(results_fp):
         print(f"Loading results from file {results_directory}")
