@@ -2,10 +2,10 @@ import os
 import numpy as np
 
 from common.experiment_err_vs_n import run_experiment, plot_results
-from load_data import load_data
+from .load_data import load_data
 
 
-if __name__ == "__main__":
+def run():
     # %% setup model parameters
     lowest_cv_err_da_parameters = dict(kernels=(80, 20, 0), R=4)
     lowest_val_err_da_parameters = dict(kernels=(10, 30, 0), R=10)
@@ -21,4 +21,8 @@ if __name__ == "__main__":
     results = run_experiment(load_data, N_range, lowest_cv_err_da_parameters, lowest_val_err_da_parameters,
                              lowest_cv_err_aggr_parameters, lowest_val_err_aggr_parameters, results_directory)
 
-    plot_results(results)
+    plot_results(results, "coupled_electrical_drives")
+
+
+if __name__ == "__main__":
+    run()

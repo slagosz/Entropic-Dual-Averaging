@@ -1,9 +1,10 @@
 import os
 
-from load_data import load_data
+from .load_data import load_data
 from common.experiment_extra_noise import run_experiment, plot_results
 
-if __name__ == "__main__":
+
+def run():
     SNR_range = [25, 20, 15, 10, 5, 1]
 
     kernels_da = (10, 30, 0)
@@ -17,4 +18,8 @@ if __name__ == "__main__":
     results_directory = os.path.join(os.path.dirname(__file__), 'results')
 
     results = run_experiment(load_data, SNR_range, kernels_da, R_da, kernels_aggr, R_aggr, results_directory)
-    plot_results(results, da_reference_error, aggr_reference_error)
+    plot_results(results, da_reference_error, aggr_reference_error, "coupled_electrical_drives")
+
+
+if __name__ == "__main__":
+    run()

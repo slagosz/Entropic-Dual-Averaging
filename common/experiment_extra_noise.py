@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 from tqdm import tqdm
 
+import common.config
 from common.run_experiment import estimate_and_validate_DA, estimate_and_validate_l1_aggregation
 import matplotlib.pyplot as plt
 
@@ -41,9 +42,9 @@ def generate_results(load_data_function, SNR_range, kernels_da, R_da, kernels_ag
     return results
 
 
-def plot_results(results, da_reference_error, aggr_reference_error):
+def plot_results(results, da_reference_error, aggr_reference_error, benchmark_name):
     plt.close()
-    plt.style.use('../common/style.mplstyle')
+    plt.style.use(common.config.STYLE_FP)
 
     plt.figure(figsize=(3.7, 2.4))
 
@@ -55,11 +56,12 @@ def plot_results(results, da_reference_error, aggr_reference_error):
     plt.plot(SNR_range, errors_aggr / aggr_reference_error, '.--')
 
     plt.xlabel('SNR')
-    plt.ylabel(r'$\textrm{err / err}_0$')
+    # plt.ylabel(r'$\textrm{err / err}_0$')
+    plt.ylabel(r'err / err_0')
     plt.legend(['EDA', 'CA'])
     plt.grid()
 
-    plt.savefig(f'err_extra_noise.pdf')
+    plt.savefig(os.path.join(common.config.PLOTS_DIR, f'{benchmark_name}_err_extra_noise.pdf'))
 
 
 def run_experiment(load_data_function, SNR_range, kernels_da, R_da, kernels_aggr, R_aggr, results_directory):

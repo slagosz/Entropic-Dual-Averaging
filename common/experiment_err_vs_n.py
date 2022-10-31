@@ -3,6 +3,7 @@ from tqdm import tqdm
 import json
 import matplotlib.pyplot as plt
 
+import common.config
 from common.run_experiment import estimate_and_validate_DA, estimate_and_validate_l1_aggregation
 
 
@@ -39,12 +40,10 @@ def generate_results(load_data_function, N_range, lowest_cv_err_da_parameters, l
     return dict(err_da_cv=e_da_cv, err_da_val=e_da_val, err_aggr_cv=e_aggr_cv, err_aggr_val=e_aggr_val, N_range=N_range)
 
 
-def plot_results(results):
-    style_filepath = os.path.join(os.path.dirname(__file__), 'style.mplstyle')
-
+def plot_results(results, benchmark_name):
     # plot algorithms' errors
     plt.close()
-    plt.style.use(style_filepath)
+    plt.style.use(common.config.STYLE_FP)
 
     plt.figure(figsize=(3.7, 2.4))
     plt.plot(results['N_range'], results['err_da_cv'].values(), '.-')
@@ -56,7 +55,7 @@ def plot_results(results):
     plt.legend(['EDA', 'CA', 'EDA*', 'CA*'])
     plt.grid()
 
-    plt.savefig(os.path.join('err_vs_n.pdf'))
+    plt.savefig(os.path.join(common.config.PLOTS_DIR, f'{benchmark_name}_err_vs_n.pdf'))
 
 
 def run_experiment(load_data_function, N_range, lowest_cv_err_da_parameters, lowest_val_err_da_parameters,

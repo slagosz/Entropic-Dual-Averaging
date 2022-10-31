@@ -5,10 +5,11 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+import common.config
 from common.aggregation_algorithm import L1AggregationAlgorithm
 from common.dual_averaging_algorithm import EntropicDualAveragingAlgorithm
 from common.run_experiment import estimate_and_validate_volterra_model
-from load_data import load_data
+from .load_data import load_data
 
 
 def measure_estimation_time(x_est, y_est, kernels, algorithm_class, R, num_of_experiments):
@@ -54,7 +55,7 @@ def run_experiment(N_list, model_memory_length_list, num_of_experiments=5):
 
 
 def plot_results(results):
-    plt.style.use('../common/style.mplstyle')
+    plt.style.use(common.config.STYLE_FP)
 
     N_list = results['N_list']
     D_list = results['D_list']
@@ -72,7 +73,7 @@ def plot_results(results):
     plt.legend(['EDA', 'CA'])
     plt.grid()
 
-    plt.savefig('time_var_N.pdf')
+    plt.savefig(os.path.join(common.config.PLOTS_DIR, 'time_var_N.pdf'))
 
     plt.close()
 
@@ -84,10 +85,10 @@ def plot_results(results):
     plt.legend(['EDA', 'CA'])
     plt.grid()
 
-    plt.savefig('time_var_D.pdf')
+    plt.savefig(os.path.join(common.config.PLOTS_DIR, 'time_var_D.pdf'))
 
 
-if __name__ == "__main__":
+def run():
     N_list = np.arange(200, 1001, 100)
     model_memory_length_list = np.arange(40, 101, 10)
 
@@ -105,3 +106,6 @@ if __name__ == "__main__":
             pickle.dump(results, f)
 
     plot_results(results)
+
+if __name__ == "__main__":
+    run()

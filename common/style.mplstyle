@@ -1,6 +1,6 @@
 font.family:         serif
 font.size:           10
-text.usetex:         True
+text.usetex:         False
 axes.labelsize:      small
 xtick.labelsize:     small
 ytick.labelsize:     small

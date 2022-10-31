@@ -3,6 +3,7 @@ from tqdm import tqdm
 import json
 import matplotlib.pyplot as plt
 
+import common.config
 from common.run_experiment import estimate_and_validate_DA, estimate_and_validate_l1_aggregation
 
 
@@ -35,7 +36,7 @@ def plot_results(results, fn):
     plt.ylabel('err')
     plt.grid()
 
-    plt.savefig(fn + '.pdf')
+    plt.savefig(os.path.join(common.config.PLOTS_DIR, fn + '.pdf'))
 
 
 def run_experiment(load_data_function, epochs_range, da_parameters, results_directory, fn):
