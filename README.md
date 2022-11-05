@@ -28,7 +28,7 @@ to build an image. Alternatively, you can pull it by running
 docker pull szym4n/eda
 ```
 
-Now you, to run the CLI, type
+In order to run the CLI, type
 ```
 docker run -it --name eda_container eda 
 ```
