@@ -1,7 +1,7 @@
 # Entropic Dual Averaging
 The repository accompanies the publication:
 > Szymon Łagosz, Paweł Wachel and Przemysław Śliwiński, _A Dual Averaging Algorithm for On-line Modelling of Infinite Memory 
-Nonlinear Systems_
+Nonlinear Systems_, IEEE Transactions on Automatic Control, to appear
 
 ## Requirements
 The code was tested with Python 3.8.9 on Ubuntu 16.04.7 64bit.
